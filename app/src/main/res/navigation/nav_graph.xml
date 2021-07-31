@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    android:label="Note"
+    app:startDestination="@id/noteListFragment">
+
+    <fragment
+        android:id="@+id/noteListFragment"
+        android:name="com.niran.noteapplication.ui.NoteListFragment"
+        android:label="My Notes"
+        tools:layout="@layout/fragment_note_list">
+        <action
+            android:id="@+id/action_noteListFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment" />
+        <action
+            android:id="@+id/action_noteListFragment_to_noteReviewFragment"
+            app:destination="@id/noteReviewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addNoteFragment"
+        android:name="com.niran.noteapplication.ui.AddNoteFragment"
+        android:label="Add Note"
+        tools:layout="@layout/fragment_add_note">
+        <action
+            android:id="@+id/action_addNoteFragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:popUpTo="@id/noteListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteReviewFragment"
+        android:name="com.niran.noteapplication.ui.NoteReviewFragment"
+        android:label="Note"
+        tools:layout="@layout/fragment_note_review">
+        <action
+            android:id="@+id/action_noteReviewFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment"
+            app:popUpTo="@id/noteReviewFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_noteReviewFragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:popUpTo="@id/noteReviewFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>

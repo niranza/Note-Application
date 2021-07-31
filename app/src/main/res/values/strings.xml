@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Note Application</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="remind_me">remind me</string>
+    <string name="remind_me_note_by_notification">remind me note by notification</string>
+    <string name="channel_id">notification channel id</string>
+    <string name="channel_name">notification channel name</string>
+    <string name="note_reminder">Note Reminder:</string>
+    <string name="notifying_mode">Notifying Mode</string>
+    <string name="deleting_mode">Deleting Mode</string>
+    <string name="delete_notes">Delete Notes</string>
+    <string name="note">note</string>
+    <string name="new_note">New note</string>
+    <string name="add_note">Add Note</string>
+    <string name="save">save</string>
+    <string name="save_note">save note</string>
+    <string name="edit_note">Edit Note</string>
+</resources>
