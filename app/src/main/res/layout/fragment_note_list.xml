@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.niran.noteapplication.ui.NoteViewModel" />
+            type="com.niran.noteapplication.viewmodels.NoteViewModel" />
 
         <variable
             name="fragment"
@@ -49,6 +49,17 @@
             android:src="@drawable/ic_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_no_notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/click_on_the_to_add_a_new_note"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

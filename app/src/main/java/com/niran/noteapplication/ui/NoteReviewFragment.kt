@@ -10,6 +10,10 @@ import com.niran.noteapplication.R
 import com.niran.noteapplication.database.models.Note
 import com.niran.noteapplication.database.models.sendNoteNotification
 import com.niran.noteapplication.databinding.FragmentNoteReviewBinding
+import com.niran.noteapplication.utils.FragmentUtils.Companion.showUndoSnackBar
+import com.niran.noteapplication.utils.NoteUtils.Companion.toEditableText
+import com.niran.noteapplication.viewmodels.NoteViewModel
+import com.niran.noteapplication.viewmodels.NoteViewModelFactory
 
 /**
  * you can get to this fragment only by...
@@ -18,7 +22,8 @@ import com.niran.noteapplication.databinding.FragmentNoteReviewBinding
  */
 class NoteReviewFragment : Fragment() {
 
-    private lateinit var binding: FragmentNoteReviewBinding
+    private var _binding: FragmentNoteReviewBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var note: Note
 
@@ -29,9 +34,9 @@ class NoteReviewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        binding = FragmentNoteReviewBinding.inflate(inflater)
+        _binding = FragmentNoteReviewBinding.inflate(inflater)
 
         note = viewModel.note!!
 
@@ -44,10 +49,12 @@ class NoteReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            viewModel = this@NoteReviewFragment.viewModel
             lifecycleOwner = viewLifecycleOwner
-        }
 
+            noteReviewTv.text = viewModel.note?.toEditableText()
+
+            root.setOnClickListener { navigateToAddNoteFragment() }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -62,6 +69,7 @@ class NoteReviewFragment : Fragment() {
             }
             R.id.delete_note -> {
                 viewModel.deleteNote(note)
+                showUndoSnackBar { viewModel.insertNote(note) }
                 navigateToNoteListFragment()
                 true
             }
@@ -78,4 +86,9 @@ class NoteReviewFragment : Fragment() {
 
     private fun navigateToNoteListFragment() = view?.findNavController()
         ?.navigate(NoteReviewFragmentDirections.actionNoteReviewFragmentToNoteListFragment())
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

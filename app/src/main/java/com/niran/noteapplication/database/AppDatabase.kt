@@ -7,7 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.niran.noteapplication.database.daos.NoteDao
 import com.niran.noteapplication.database.models.Note
-import com.niran.noteapplication.utils.WELCOME_NOTE
+import com.niran.noteapplication.utils.Constants.Companion.WELCOME_NOTE_TEXT
+import com.niran.noteapplication.utils.Constants.Companion.WELCOME_NOTE_TITLE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,8 @@ abstract class AppDatabase : RoomDatabase() {
             dao.deleteAllNotes()
 
             val welcomeNote = Note(
-                noteText = WELCOME_NOTE
+                noteTitle = WELCOME_NOTE_TITLE,
+                noteText = WELCOME_NOTE_TEXT,
             )
 
             dao.insertNote(welcomeNote)
@@ -46,9 +48,11 @@ abstract class AppDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "app_database"
+                    "app_db"
                 )
                     .addCallback(RoomCallBack(scope))
+                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
 
                 INSTANCE = instance

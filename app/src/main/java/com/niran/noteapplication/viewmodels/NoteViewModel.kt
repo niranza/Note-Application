@@ -1,4 +1,4 @@
-package com.niran.noteapplication.ui
+package com.niran.noteapplication.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -14,24 +14,9 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
 
     var note: Note? = null
 
-    fun updateNote(note: Note, text: String) {
-        viewModelScope.launch {
-            val updatedNote = note.copy(noteText = text)
-            noteRepository.updateNote(updatedNote)
-        }
-    }
+    fun insertNote(note: Note) = viewModelScope.launch { noteRepository.insertNote(note) }
 
-    fun insertNote(noteText: String) {
-        viewModelScope.launch {
-            noteRepository.insertNote(Note(noteText = noteText))
-        }
-    }
-
-    fun deleteNote(note: Note) {
-        viewModelScope.launch {
-            noteRepository.deleteNote(note)
-        }
-    }
+    fun deleteNote(note: Note) = viewModelScope.launch { noteRepository.deleteNote(note) }
 }
 
 class NoteViewModelFactory(private val noteRepository: NoteRepository) : ViewModelProvider.Factory {

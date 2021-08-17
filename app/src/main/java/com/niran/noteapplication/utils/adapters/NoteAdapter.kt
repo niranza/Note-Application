@@ -1,4 +1,4 @@
-package com.niran.noteapplication.utils
+package com.niran.noteapplication.utils.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import com.niran.noteapplication.database.models.Note
 import com.niran.noteapplication.databinding.NoteItemBinding
 
 class NoteAdapter(private val clickHandler: NoteClickHandler) :
-    ListAdapter<Note, NoteAdapter.NoteViewHolder>(Comparator) {
+    ListAdapter<Note, NoteAdapter.NoteViewHolder>(NoteCallBack) {
 
     class NoteViewHolder private constructor(
         private val binding: NoteItemBinding,
@@ -20,14 +20,15 @@ class NoteAdapter(private val clickHandler: NoteClickHandler) :
         fun bind(note: Note) {
             binding.apply {
                 this.note = note
-                noteTv.setOnClickListener { clickHandler.onNoteClick(note) }
+                itemView.setOnClickListener { clickHandler.onNoteClick(note) }
                 executePendingBindings()
             }
         }
 
         companion object {
             fun create(parent: ViewGroup, clickHandler: NoteClickHandler): NoteViewHolder {
-                val binding = NoteItemBinding.inflate(LayoutInflater.from(parent.context))
+                val binding = NoteItemBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
                 return NoteViewHolder(binding, clickHandler)
             }
         }
@@ -45,13 +46,13 @@ class NoteAdapter(private val clickHandler: NoteClickHandler) :
         holder.bind(getItem(position))
     }
 
-    object Comparator : DiffUtil.ItemCallback<Note>() {
+    private object NoteCallBack : DiffUtil.ItemCallback<Note>() {
         override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return newItem.id == oldItem.id
+            return newItem.noteId == oldItem.noteId
         }
 
         override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
-            return oldItem.noteText == newItem.noteText
+            return oldItem == newItem
         }
     }
 }

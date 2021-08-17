@@ -1,4 +1,4 @@
-package com.niran.noteapplication
+package com.niran.noteapplication.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -8,9 +8,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.niran.noteapplication.MainActivity
+import com.niran.noteapplication.R
 
 object NotificationUtil {
-    const val NOTIFICATION_ID = 0
+    private const val NOTIFICATION_ID = 0
 
     fun sendNotification(text: String, context: Context) {
 
@@ -49,7 +51,6 @@ object NotificationUtil {
             }
 
             getManager(context).createNotificationChannel(channel)
-
         }
     }
 

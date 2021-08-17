@@ -10,16 +10,21 @@ import androidx.navigation.findNavController
 import com.niran.noteapplication.NoteApplication
 import com.niran.noteapplication.database.models.Note
 import com.niran.noteapplication.databinding.FragmentAddNoteBinding
-import com.niran.noteapplication.utils.AppUtils
+import com.niran.noteapplication.utils.FragmentUtils.Companion.hideKeyBoard
+import com.niran.noteapplication.utils.NoteUtils.Companion.toEditableText
+import com.niran.noteapplication.utils.NoteUtils.Companion.toNote
+import com.niran.noteapplication.viewmodels.NoteViewModel
+import com.niran.noteapplication.viewmodels.NoteViewModelFactory
 
 
 class AddNoteFragment : Fragment() {
 
-    private lateinit var binding: FragmentAddNoteBinding
+    private var _binding: FragmentAddNoteBinding? = null
+    private val binding get() = _binding!!
 
-    private var isEditingExistingNote: Boolean = false
+    private val isEditingExistingNote get() = viewModel.note != null
 
-    private lateinit var note: Note
+    private var note: Note? = null
 
     private val viewModel: NoteViewModel by activityViewModels {
         NoteViewModelFactory((activity?.application as NoteApplication).noteRepository)
@@ -28,12 +33,11 @@ class AddNoteFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentAddNoteBinding.inflate(inflater)
+    ): View {
 
-        val nullableNote = viewModel.note
-        isEditingExistingNote = nullableNote != null
-        if (isEditingExistingNote) note = nullableNote!!
+        _binding = FragmentAddNoteBinding.inflate(inflater)
+
+        if (isEditingExistingNote) note = viewModel.note
 
         return binding.root
     }
@@ -44,32 +48,25 @@ class AddNoteFragment : Fragment() {
         binding.apply {
             fragment = this@AddNoteFragment
             lifecycleOwner = viewLifecycleOwner
-            if (isEditingExistingNote) newNoteEt.setText(note.noteText)
+            if (isEditingExistingNote) newNoteEt.setText(note?.toEditableText())
         }
     }
 
-    fun hideKeyboard() = AppUtils.hideKeyBoard(requireActivity())
-
-    fun saveNote() {
-        val text = binding.newNoteEt.text.toString()
-        if (text.isBlank()) {
-            if (isEditingExistingNote) viewModel.deleteNote(note)
+    fun saveNote() = binding.newNoteEt.text.toString().apply {
+        if (isBlank()) {
+            if (isEditingExistingNote) note?.let { viewModel.deleteNote(it) }
             navigateToNoteListFragment()
-            return
-        }
-
-        if (isEditingExistingNote) viewModel.updateNote(note, text)
-        else viewModel.insertNote(text)
+            return@apply
+        } else viewModel.insertNote(toNote(note?.noteId ?: 0))
 
         navigateToNoteListFragment()
     }
 
-    private fun navigateToNoteListFragment() =
-        view?.findNavController()
-            ?.navigate(AddNoteFragmentDirections.actionAddNoteFragmentToNoteListFragment())
+    private fun navigateToNoteListFragment() = view?.findNavController()
+        ?.navigate(AddNoteFragmentDirections.actionAddNoteFragmentToNoteListFragment())
 
     override fun onDestroy() {
         super.onDestroy()
-        hideKeyboard()
+        hideKeyBoard()
     }
 }

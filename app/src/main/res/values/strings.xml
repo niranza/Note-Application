@@ -16,4 +16,7 @@
     <string name="save">save</string>
     <string name="save_note">save note</string>
     <string name="edit_note">Edit Note</string>
+    <string name="note_deleted_successfully">Note Deleted Successfully</string>
+    <string name="undo">UNDO</string>
+    <string name="click_on_the_to_add_a_new_note">Click on the + to add a new note</string>
 </resources>
